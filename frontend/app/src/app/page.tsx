@@ -1,3 +1,5 @@
+import BookingList from '../components/BookingList';
+
 async function getBookings() {
   const res = await fetch('http://host.docker.internal:5000/api/bookings', { cache: 'no-store', mode: 'no-cors' })
  
@@ -15,7 +17,7 @@ const Home: React.FC = async () => {
   return (
     <div>
       <h1>Current booking count: {bookings.length}</h1>
-
+		<BookingList bookings={bookings} />
     </div>
   );
 };
