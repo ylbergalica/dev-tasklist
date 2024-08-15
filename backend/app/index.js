@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2/promise'); // Using promise-based API
+const cors = require('cors');
 
 const app = express();
 const port = 5000;
@@ -15,6 +16,9 @@ const pool = mysql.createPool({
 	queueLimit: 0,
 });
 
+app.use(cors({
+    origin: '*',
+}));
 app.use(bodyParser.json());
 
 // API endpoint to fetch bookings
@@ -28,7 +32,6 @@ app.get('/api/bookings', async (req, res) => {
 	}
 });
 
-// API endpoint to fetch a single booking by its ID
 app.get('/api/bookings/:id', async (req, res) => {
 	const { id } = req.params;
 	try {

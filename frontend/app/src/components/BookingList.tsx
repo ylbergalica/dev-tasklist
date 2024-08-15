@@ -15,14 +15,15 @@ interface BookingListProps {
 
 const BookingList: React.FC<BookingListProps> = ({ bookings }) => {
 	return (
-		<ul className="space-y-8">
+		<ul className="space-y-8 w-[100%] flex flex-col items-center">
+			<h1 className="text-2xl">Today&apos;s Bookings</h1>
 			{bookings.map((booking) => (
 				<li key={booking.id}>
 					<Link
-						href={{pathname: `/booking/${booking.id}`}}
-						className="bg-slate-800 shadow-md rounded-lg p-4 hover:shadow-lg hover:bg-slate-700 cursor-pointer transition-all duration-300"
+						href={{pathname: `/${booking.id}`}}
+						className="bg-slate-800 shadow-md rounded-lg p-4 text-white hover:shadow-lg hover:bg-slate-700 cursor-pointer transition-all duration-300"
 					>
-						A Booking on {booking.date.toString()} starting at {booking.start_time}
+						A Booking on {booking.date.toString().substring(0, 10)} starting at {booking.start_time}
 					</Link>
 				</li>
 			))}
