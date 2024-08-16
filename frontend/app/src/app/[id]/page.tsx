@@ -57,7 +57,9 @@ const BookingPage: React.FC = () => {
 					</button>
 				</div>
 			) : (
-				<div>Loading...</div>
+				<div className="h-[90vh] w-[100%] flex items-center justify-center p-4">
+					Loading...
+				</div>
 			)}
 		</>
 	);

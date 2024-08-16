@@ -1,18 +1,13 @@
+"use client";
+
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import Link from "next/link";
+
 import BookingList from '../components/BookingList';
 
-async function getBooking() {
-	const response = await fetch(`http://host.docker.internal:5000/api/bookings/2`, { cache: 'no-store'});
-	console.log("TESTING ")
-	if (!response.ok) {
-		throw new Error('Failed to fetch booking');
-	}
-
-	const data = await response.json();
-	return data;
-}
-
 async function getBookings() {
-	const res = await fetch('http://host.docker.internal:5000/api/bookings', { cache: 'no-store', mode: 'no-cors' })
+	const res = await fetch('http://host.docker.internal:5000/api/bookings', { cache: 'no-store' })
 
 	if (!res.ok) {
 		throw new Error('Failed to fetch data')
@@ -21,16 +16,37 @@ async function getBookings() {
 	return res.json()
 }
 
-const Home: React.FC = async () => {
-	const bookings = await getBookings()
+const Home: React.FC = () => {
+	const router = useRouter();
 
-	const book = await getBooking();
-	console.log("eello ", book);
+	const [bookings, setBookings] = useState(null);
+
+	useEffect(() => {
+		getBookings().then(result => {
+			setBookings(result);
+		})
+	}, [])
 
 	return (
-		<div className='h-[90vh] w-[100%] flex items-center justify-center'>
-			<BookingList bookings={bookings} />
-		</div>
+		<>
+			{bookings ? (
+				<div className='h-[90vh] w-[100%] flex items-center justify-center'>
+					<BookingList bookings={bookings} />
+
+					<Link
+						href={{ pathname: '/book' }}
+						className="fixed top-12 right-24 bg-green-900 text-white p-4 rounded hover:bg-green-800 cursor-pointer transition-all duration-150"
+					>
+						New Booking
+					</Link>
+				</div>
+			) : (
+				<div className='h-[90vh] w-[100%] flex items-center justify-center'>
+					Loading...
+				</div>
+			)}
+
+		</>
 	);
 };
 

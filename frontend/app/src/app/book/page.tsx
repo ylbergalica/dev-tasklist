@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import FormInput from '@/components/FormInput';
+
 interface FormData {
     service: string;
     doctor_name: string;
@@ -14,6 +16,8 @@ interface FormData {
 };
 
 const BookingsPage = () => {
+    const router = useRouter();
+
     const [formData, setFormData] = useState<FormData>({
         service: '',
         doctor_name: '',
@@ -21,8 +25,6 @@ const BookingsPage = () => {
         end_time: '',
         date: '',
     });
-
-    const router = useRouter();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -32,6 +34,10 @@ const BookingsPage = () => {
             [name]: value
         });
     };
+
+    const handleBack = () => {
+		router.back();
+	};
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -59,66 +65,50 @@ const BookingsPage = () => {
     };
 
     return (
-        <div className="h-[90vh] w-[100%] flex items-center justify-center p-4">
-            <h1>Make a Booking</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="service">Service:</label>
-                    <input
-                        type="text"
-                        id="service"
-                        name="service"
-                        value={formData.service}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="doctor_name">Doctor&apos;s Name:</label>
-                    <input
-                        type="text"
-                        id="doctor_name"
-                        name="doctor_name"
-                        value={formData.doctor_name}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="start_time">Start Time:</label>
-                    <input
-                        type="time"
-                        id="start_time"
-                        name="start_time"
-                        value={formData.start_time}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="end_time">End Time:</label>
-                    <input
-                        type="time"
-                        id="end_time"
-                        name="end_time"
-                        value={formData.end_time}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="date">Date:</label>
-                    <input
-                        type="date"
-                        id="date"
-                        name="date"
-                        value={formData.date}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <button type="submit">Submit</button>
+        <div className="h-[90vh] w-[100%] flex flex-col items-center justify-center p-4">
+            <h1 className='text-2xl my-4'>Make a Booking</h1>
+            <form onSubmit={handleSubmit} className='min-w-min space-y-2 flex flex-col items-center'>
+                <FormInput
+                    type="text"
+                    name="service"
+                    text="Service: "
+                    value={formData.service}
+                    onChange={handleChange}
+                />
+                <FormInput
+                    type="text"
+                    name="doctor_name"
+                    text="Doctor's Name: "
+                    value={formData.doctor_name}
+                    onChange={handleChange}
+                />
+                <FormInput
+                    type="time"
+                    name="start_time"
+                    text="Start Time: "
+                    value={formData.start_time}
+                    onChange={handleChange}
+                />
+                <FormInput
+                    type="time"
+                    name="end_time"
+                    text="End Time: "
+                    value={formData.end_time}
+                    onChange={handleChange}
+                />
+                <FormInput
+                    type="date"
+                    name="date"
+                    text="Date: "
+                    value={formData.date}
+                    onChange={handleChange}
+                />
+                <button type="submit" className='bg-green-900 text-white py-2 px-6 rounded-sm w-fit hover:bg-green-800 cursor-pointer transition-all duration-150'>Submit</button>
             </form>
+
+            <button onClick={handleBack} className="fixed top-12 left-24 bg-blue-950 text-white p-4 rounded hover:bg-blue-900 cursor-pointer">
+                Go Back
+            </button>
         </div>
     );
 };
