@@ -36,11 +36,28 @@ const BookingsPage = () => {
     };
 
     const handleBack = () => {
-		router.back();
-	};
+        router.back();
+    };
+
+    const convertHourFormat = (time: string): string => {
+        const [hours, minutes] = time.split(':').map(Number);
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const formattedHours = (hours % 12 || 12).toString().padStart(2, '0');
+        const formattedMinutes = minutes.toString().padStart(2, '0');
+        return `${formattedHours}:${formattedMinutes} ${ampm}`;
+    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        const startTimeFormatted = convertHourFormat(formData.start_time);
+        const endTimeFormatted = convertHourFormat(formData.end_time);
+
+        const updatedFormData = {
+            ...formData,
+            start_time: startTimeFormatted,
+            end_time: endTimeFormatted,
+        };
 
         try {
             const response = await fetch('http://host.docker.internal:5000/api/bookings', {
@@ -48,7 +65,7 @@ const BookingsPage = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(updatedFormData),
             });
 
             if (!response.ok) {
