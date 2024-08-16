@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface FormData {
     service: string;
@@ -20,9 +22,6 @@ const BookingsPage = () => {
         date: '',
     });
 
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
-
     const router = useRouter();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -30,7 +29,7 @@ const BookingsPage = () => {
 
         setFormData({
             ...formData,
-            [name]: value,
+            [name]: value
         });
     };
 
@@ -48,25 +47,19 @@ const BookingsPage = () => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                setError(errorData.message);
+                toast.error(errorData.message || 'Error inserting booking');
                 throw new Error(errorData.message || 'Error inserting booking');
             }
 
-            setSuccess('Booking inserted successfully');
-            setError(null);
+            toast.success('Booking inserted successfully');
             router.push('/');
         } catch (err) {
-            setError(err.message || 'Error inserting booking');
-            setSuccess(null);
+            toast.error(err.message || 'Error inserting booking');
         }
     };
 
-
     return (
-        <div>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {success && <p style={{ color: 'green' }}>{success}</p>}
-
+        <div className="h-[90vh] w-[100%] flex items-center justify-center p-4">
             <h1>Make a Booking</h1>
             <form onSubmit={handleSubmit}>
                 <div>
